@@ -8,6 +8,7 @@ namespace CharityCounter.Installers
         {
             Container.BindInterfacesAndSelfTo<Counter>().AsSingle();
             Container.BindInterfacesAndSelfTo<FileWriter>().AsSingle();
+            Container.BindInterfacesAndSelfTo<ChatBroadcaster>().AsSingle();
         }
     }
 }

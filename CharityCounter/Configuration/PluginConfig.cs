@@ -13,6 +13,8 @@ namespace CharityCounter.Configuration
         public virtual int MapsFailed { get; set; } = 0;
         public virtual float FailMultiplier { get; set; } = 3f;
         public virtual string FileContent { get; set; } = "${dollars}\nMisses: {misses}\nMaps Failed: {fails}";
+        public virtual string ChatCommand { get; set; } = "!charity";
+        public virtual string ChatContent { get; set; } = "${dollars}\nMisses: {misses}\nMaps Failed: {fails}";
 
         /// <summary>
         /// This is called whenever BSIPA reads the config from disk (including when file changes are detected).

@@ -12,10 +12,6 @@ namespace CharityCounter
         private readonly Counter counter;
         private readonly SemaphoreSlim fileSemaphore;
 
-        public const string DollarsFormat = "{dollars}";
-        public const string MissesFormat = "{misses}";
-        public const string FailsFormat = "{fails}";
-
         public FileWriter(Counter counter)
         {
             this.counter = counter;
@@ -34,11 +30,7 @@ namespace CharityCounter
 
         private async void OnCounterUpdated()
         {
-            string content = PluginConfig.Instance.FileContent;
-            content = content.Replace(DollarsFormat, $"{counter.Dollars}");
-            content = content.Replace(MissesFormat, $"{counter.NotesMissed}");
-            content = content.Replace(FailsFormat, $"{counter.MapsFailed}");
-
+            string content = Utils.FormatOutput(PluginConfig.Instance.FileContent, counter.Dollars, counter.NotesMissed, counter.MapsFailed);
             await fileSemaphore.WaitAsync();
             using (StreamWriter file = new StreamWriter(Path.Combine(UnityGame.UserDataPath, $"{nameof(CharityCounter)}.txt")))
             {

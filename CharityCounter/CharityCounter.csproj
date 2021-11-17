@@ -26,6 +26,10 @@
 		  <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\BeatmapCore.dll</HintPath>
 		  <Private>False</Private>
 		</Reference>
+		<Reference Include="ChatCore">
+		  <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Beat Saber\Libs\ChatCore.dll</HintPath>
+		  <Private>False</Private>
+		</Reference>
 		<Reference Include="GameplayCore">
 		  <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\GameplayCore.dll</HintPath>
 		  <Private>False</Private>
