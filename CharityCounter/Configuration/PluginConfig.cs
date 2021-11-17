@@ -9,7 +9,10 @@ namespace CharityCounter.Configuration
         public static PluginConfig Instance { get; set; }
         public virtual bool ModEnabled { get; set; } = false;
         public virtual int NotesMissed { get; set; } = 0;
+        public virtual float MissMultiplier { get; set; } = 0.01f;
         public virtual int MapsFailed { get; set; } = 0;
+        public virtual float FailMultiplier { get; set; } = 3f;
+        public virtual string FileContent { get; set; } = "${dollars}\nMisses: {misses}\nMaps Failed: {fails}";
 
         /// <summary>
         /// This is called whenever BSIPA reads the config from disk (including when file changes are detected).

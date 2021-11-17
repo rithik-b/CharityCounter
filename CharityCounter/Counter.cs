@@ -1,24 +1,31 @@
 ﻿using CharityCounter.Configuration;
+using System;
 
 namespace CharityCounter
 {
     internal class Counter
     {
-        private int NotesMissed
+        public Action CounterUpdatedEvent;
+
+        public float Dollars => (PluginConfig.Instance.MissMultiplier * NotesMissed) + (PluginConfig.Instance.FailMultiplier * MapsFailed);
+
+        public int NotesMissed
         {
             get => PluginConfig.Instance.NotesMissed;
-            set
+            private set
             {
                 PluginConfig.Instance.NotesMissed = value;
+                CounterUpdatedEvent?.Invoke();
             }
         }
 
-        private int MapsFailed
+        public int MapsFailed
         {
             get => PluginConfig.Instance.MapsFailed;
-            set
+            private set
             {
                 PluginConfig.Instance.MapsFailed = value;
+                CounterUpdatedEvent?.Invoke();
             }
         }
 

@@ -7,6 +7,7 @@ namespace CharityCounter.Installers
         public override void InstallBindings()
         {
             Container.BindInterfacesAndSelfTo<Counter>().AsSingle();
+            Container.BindInterfacesAndSelfTo<FileWriter>().AsSingle();
         }
     }
 }
