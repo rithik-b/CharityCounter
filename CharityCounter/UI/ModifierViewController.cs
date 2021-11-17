@@ -1,8 +1,10 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
+using BeatSaberMarkupLanguage.Components;
 using BeatSaberMarkupLanguage.GameplaySetup;
 using CharityCounter.Configuration;
 using System;
 using System.ComponentModel;
+using UnityEngine;
 using Zenject;
 
 namespace CharityCounter.UI
@@ -10,11 +12,19 @@ namespace CharityCounter.UI
     internal class ModifierViewController : IInitializable, IDisposable, INotifyPropertyChanged
     {
         private readonly Counter counter;
+        private readonly FileWriter fileWriter;
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ModifierViewController(Counter counter)
+        [UIComponent("file-keyboard")]
+        private RectTransform fileKeyboardTransform;
+
+        [UIComponent("chat-keyboard")]
+        private ModalKeyboard chatKeyboard;
+
+        public ModifierViewController(Counter counter, FileWriter fileWriter)
         {
             this.counter = counter;
+            this.fileWriter = fileWriter;
         }
 
         public void Initialize()
@@ -28,6 +38,18 @@ namespace CharityCounter.UI
             {
                 GameplaySetup.instance.RemoveTab(nameof(CharityCounter));
             }
+        }
+
+        [UIAction("#post-parse")]
+        private void PostParse()
+        {
+            ModalKeyboard fileKeyboard = fileKeyboardTransform.Find("BSMLModalKeyboard").GetComponent<ModalKeyboard>();
+            KEYBOARD.KEY dollarsKey = new KEYBOARD.KEY(fileKeyboard.keyboard, new Vector2(-35, 11f), Utils.DollarsFormat, 18, 10, new Color(0.92f, 0.64f, 0));
+            KEYBOARD.KEY missesKey = new KEYBOARD.KEY(fileKeyboard.keyboard, new Vector2(-25, 11f), Utils.MissesFormat, 18, 10, new Color(0.92f, 0.64f, 0));
+            KEYBOARD.KEY failsKey = new KEYBOARD.KEY(fileKeyboard.keyboard, new Vector2(-15, 11f), Utils.FailsFormat, 15, 10, new Color(0.92f, 0.64f, 0));
+            fileKeyboard.keyboard.keys.Add(dollarsKey);
+            fileKeyboard.keyboard.keys.Add(missesKey);
+            fileKeyboard.keyboard.keys.Add(failsKey);
         }
 
         [UIAction("reset-counters")]
@@ -51,6 +73,7 @@ namespace CharityCounter.UI
             set
             {
                 PluginConfig.Instance.FileContent = value;
+                fileWriter.WriteFile();
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FileContent)));
             }
         }

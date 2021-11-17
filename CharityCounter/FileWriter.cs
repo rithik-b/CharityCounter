@@ -20,15 +20,16 @@ namespace CharityCounter
 
         public void Initialize()
         {
-            counter.CounterUpdatedEvent += OnCounterUpdated;
+            counter.CounterUpdatedEvent += WriteFile;
+            WriteFile();
         }
 
         public void Dispose()
         {
-            counter.CounterUpdatedEvent -= OnCounterUpdated;
+            counter.CounterUpdatedEvent -= WriteFile;
         }
 
-        private async void OnCounterUpdated()
+        public async void WriteFile()
         {
             string content = Utils.FormatOutput(PluginConfig.Instance.FileContent, counter.Dollars, counter.NotesMissed, counter.MapsFailed);
             await fileSemaphore.WaitAsync();
