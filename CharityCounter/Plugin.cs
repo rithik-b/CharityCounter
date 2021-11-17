@@ -36,6 +36,7 @@ namespace CharityCounter
             Instance = this;
             Plugin.Log = logger;
             zenjector.OnApp<CharityCounterAppInstaller>();
+            zenjector.OnMenu<CharityCounterMenuInstaller>();
             zenjector.OnGame<CharityCounterGameInstaller>();
 
         }

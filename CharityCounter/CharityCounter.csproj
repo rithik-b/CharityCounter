@@ -92,8 +92,12 @@
 	
 	<ItemGroup>
 		<EmbeddedResource Include="manifest.json" />
+		<EmbeddedResource Include="UI\ModifierView.bsml" />
 		<EmbeddedResource Include="Images\*.png" />
-		<EmbeddedResource Include="UI\Views\*.bsml" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="UI\ModifierView.bsml" />
 	</ItemGroup>
 
 	<ItemGroup>

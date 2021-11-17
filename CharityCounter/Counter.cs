@@ -32,5 +32,11 @@ namespace CharityCounter
         public void NoteMissed() => NotesMissed++;
 
         public void MapFailed() => MapsFailed++;
+
+        public void ResetValues()
+        {
+            NotesMissed = 0;
+            MapsFailed = 0;
+        }
     }
 }
