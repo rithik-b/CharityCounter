@@ -36,6 +36,7 @@ namespace CharityCounter.UI
         public void Initialize()
         {
             GameplaySetup.instance.AddTab(nameof(CharityCounter), "CharityCounter.UI.ModifierView.bsml", this);
+            counter.CounterUpdatedEvent += OnCounterUpdated;
         }
 
         public void Dispose()
@@ -44,6 +45,14 @@ namespace CharityCounter.UI
             {
                 GameplaySetup.instance.RemoveTab(nameof(CharityCounter));
             }
+            counter.CounterUpdatedEvent -= OnCounterUpdated;
+        }
+
+        public void OnCounterUpdated()
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MissesText)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DollarsText)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FailsText)));
         }
 
         [UIAction("#post-parse")]
@@ -90,6 +99,15 @@ namespace CharityCounter.UI
         [UIAction("reset-counters")]
         private void ResetCounters() => counter.ResetValues();
 
+        [UIValue("misses-text")]
+        private string MissesText => $"Misses: {counter.NotesMissed}";
+
+        [UIValue("dollars-text")]
+        private string DollarsText => $"${counter.Dollars}";
+
+        [UIValue("fails-text")]
+        private string FailsText => $"Maps Failed: {counter.MapsFailed}";
+
         [UIValue("enabled")]
         private bool ModEnabled
         {
@@ -109,6 +127,7 @@ namespace CharityCounter.UI
             {
                 PluginConfig.Instance.MissWeighting = float.Parse(value);
                 fileWriter.WriteFile();
+                OnCounterUpdated();
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MissWeighting)));
             }
         }
@@ -121,6 +140,7 @@ namespace CharityCounter.UI
             {
                 PluginConfig.Instance.FailWeighting = float.Parse(value);
                 fileWriter.WriteFile();
+                OnCounterUpdated();
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FailWeighting)));
             }
         }
