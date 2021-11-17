@@ -19,7 +19,7 @@ namespace CharityCounter.UI
         private RectTransform fileKeyboardTransform;
 
         [UIComponent("chat-keyboard")]
-        private ModalKeyboard chatKeyboard;
+        private RectTransform chatKeyboardTransform;
 
         public ModifierViewController(Counter counter, FileWriter fileWriter)
         {
@@ -44,12 +44,21 @@ namespace CharityCounter.UI
         private void PostParse()
         {
             ModalKeyboard fileKeyboard = fileKeyboardTransform.Find("BSMLModalKeyboard").GetComponent<ModalKeyboard>();
+            ModalKeyboard chatKeyboard = chatKeyboardTransform.Find("BSMLModalKeyboard").GetComponent<ModalKeyboard>();
+
             KEYBOARD.KEY dollarsKey = new KEYBOARD.KEY(fileKeyboard.keyboard, new Vector2(-35, 11f), Utils.DollarsFormat, 18, 10, new Color(0.92f, 0.64f, 0));
             KEYBOARD.KEY missesKey = new KEYBOARD.KEY(fileKeyboard.keyboard, new Vector2(-25, 11f), Utils.MissesFormat, 18, 10, new Color(0.92f, 0.64f, 0));
             KEYBOARD.KEY failsKey = new KEYBOARD.KEY(fileKeyboard.keyboard, new Vector2(-15, 11f), Utils.FailsFormat, 15, 10, new Color(0.92f, 0.64f, 0));
             fileKeyboard.keyboard.keys.Add(dollarsKey);
             fileKeyboard.keyboard.keys.Add(missesKey);
             fileKeyboard.keyboard.keys.Add(failsKey);
+
+            dollarsKey = new KEYBOARD.KEY(chatKeyboard.keyboard, new Vector2(-35, 11f), Utils.DollarsFormat, 18, 10, new Color(0.92f, 0.64f, 0));
+            missesKey = new KEYBOARD.KEY(chatKeyboard.keyboard, new Vector2(-25, 11f), Utils.MissesFormat, 18, 10, new Color(0.92f, 0.64f, 0));
+            failsKey = new KEYBOARD.KEY(chatKeyboard.keyboard, new Vector2(-15, 11f), Utils.FailsFormat, 15, 10, new Color(0.92f, 0.64f, 0));
+            chatKeyboard.keyboard.keys.Add(dollarsKey);
+            chatKeyboard.keyboard.keys.Add(missesKey);
+            chatKeyboard.keyboard.keys.Add(failsKey);
         }
 
         [UIAction("reset-counters")]
