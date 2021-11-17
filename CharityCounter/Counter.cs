@@ -7,7 +7,7 @@ namespace CharityCounter
     {
         public Action CounterUpdatedEvent;
 
-        public float Dollars => (PluginConfig.Instance.MissMultiplier * NotesMissed) + (PluginConfig.Instance.FailMultiplier * MapsFailed);
+        public float Dollars => (PluginConfig.Instance.MissWeighting * NotesMissed) + (PluginConfig.Instance.FailWeighting * MapsFailed);
 
         public int NotesMissed
         {

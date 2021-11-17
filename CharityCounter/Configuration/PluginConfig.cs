@@ -9,9 +9,9 @@ namespace CharityCounter.Configuration
         public static PluginConfig Instance { get; set; }
         public virtual bool ModEnabled { get; set; } = false;
         public virtual int NotesMissed { get; set; } = 0;
-        public virtual float MissMultiplier { get; set; } = 0.01f;
+        public virtual float MissWeighting { get; set; } = 0.01f;
         public virtual int MapsFailed { get; set; } = 0;
-        public virtual float FailMultiplier { get; set; } = 3f;
+        public virtual float FailWeighting { get; set; } = 3f;
         public virtual string FileContent { get; set; } = "${dollars}, Misses: {misses}, Maps Failed: {fails}";
         public virtual string ChatCommand { get; set; } = "!charity";
         public virtual string ChatContent { get; set; } = "${dollars}, Misses: {misses}, Maps Failed: {fails}";

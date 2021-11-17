@@ -15,11 +15,17 @@ namespace CharityCounter.UI
         private readonly FileWriter fileWriter;
         public event PropertyChangedEventHandler PropertyChanged;
 
+        [UIComponent("miss-keyboard")]
+        private RectTransform missKeyboardFieldTransform;
+
+        [UIComponent("fail-keyboard")]
+        private RectTransform failKeyboardFieldTransform;
+
         [UIComponent("file-keyboard")]
-        private RectTransform fileKeyboardTransform;
+        private RectTransform fileKeyboardFieldTransform;
 
         [UIComponent("chat-keyboard")]
-        private RectTransform chatKeyboardTransform;
+        private RectTransform chatKeyboardFieldTransform;
 
         public ModifierViewController(Counter counter, FileWriter fileWriter)
         {
@@ -43,8 +49,28 @@ namespace CharityCounter.UI
         [UIAction("#post-parse")]
         private void PostParse()
         {
-            ModalKeyboard fileKeyboard = fileKeyboardTransform.Find("BSMLModalKeyboard").GetComponent<ModalKeyboard>();
-            ModalKeyboard chatKeyboard = chatKeyboardTransform.Find("BSMLModalKeyboard").GetComponent<ModalKeyboard>();
+            ModalKeyboard missKeyboard = missKeyboardFieldTransform.Find("BSMLModalKeyboard").GetComponent<ModalKeyboard>();
+            ModalKeyboard failKeyboard = failKeyboardFieldTransform.Find("BSMLModalKeyboard").GetComponent<ModalKeyboard>();
+            ModalKeyboard fileKeyboard = fileKeyboardFieldTransform.Find("BSMLModalKeyboard").GetComponent<ModalKeyboard>();
+            ModalKeyboard chatKeyboard = chatKeyboardFieldTransform.Find("BSMLModalKeyboard").GetComponent<ModalKeyboard>();
+
+            RectTransform missKeyboardTransform = missKeyboard.transform as RectTransform;
+            missKeyboardTransform.sizeDelta = new Vector2(30, 42);
+            GameObject.Destroy(missKeyboardTransform.Find("KeyboardParent").gameObject);
+            RectTransform missParentTransform = new GameObject("KeyboardParent").AddComponent<RectTransform>();
+            missParentTransform.SetParent(missKeyboardTransform, false);
+            missKeyboard.keyboard = new KEYBOARD(missParentTransform, Utils.Numpad, true, 37, -11);
+            missKeyboard.keyboard.EnterPressed += (string value) => missKeyboard.modalView.Hide(true);
+            missKeyboard.modalView.blockerClickedEvent += () => missKeyboard.modalView.Hide(true);
+
+            RectTransform failKeyboardTransform = failKeyboard.transform as RectTransform;
+            failKeyboardTransform.sizeDelta = new Vector2(30, 42);
+            GameObject.Destroy(failKeyboardTransform.Find("KeyboardParent").gameObject);
+            RectTransform failParentTransform = new GameObject("KeyboardParent").AddComponent<RectTransform>();
+            failParentTransform.SetParent(failKeyboardTransform, false);
+            failKeyboard.keyboard = new KEYBOARD(failParentTransform, Utils.Numpad, true, 37, -11);
+            failKeyboard.keyboard.EnterPressed += (string value) => failKeyboard.modalView.Hide(true);
+            failKeyboard.modalView.blockerClickedEvent += () => failKeyboard.modalView.Hide(true);
 
             KEYBOARD.KEY dollarsKey = new KEYBOARD.KEY(fileKeyboard.keyboard, new Vector2(-35, 11f), Utils.DollarsFormat, 18, 10, new Color(0.92f, 0.64f, 0));
             KEYBOARD.KEY missesKey = new KEYBOARD.KEY(fileKeyboard.keyboard, new Vector2(-25, 11f), Utils.MissesFormat, 18, 10, new Color(0.92f, 0.64f, 0));
@@ -72,6 +98,30 @@ namespace CharityCounter.UI
             {
                 PluginConfig.Instance.ModEnabled = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ModEnabled)));
+            }
+        }
+
+        [UIValue("miss-weighting")]
+        private string MissWeighting
+        {
+            get => $"{PluginConfig.Instance.MissWeighting}";
+            set
+            {
+                PluginConfig.Instance.MissWeighting = float.Parse(value);
+                fileWriter.WriteFile();
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MissWeighting)));
+            }
+        }
+
+        [UIValue("fail-weighting")]
+        private string FailWeighting
+        {
+            get => $"{PluginConfig.Instance.FailWeighting}";
+            set
+            {
+                PluginConfig.Instance.FailWeighting = float.Parse(value);
+                fileWriter.WriteFile();
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FailWeighting)));
             }
         }
 
